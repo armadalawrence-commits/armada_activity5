@@ -1,7 +1,7 @@
 
 import requests
 
-url = "https://CLASSMATE-URL.onrender.com/YOUR-ENDPOINT"
+url = "https://johannesaguilar-activity4.onrender.com/student"
 
 try:
     response = requests.get(url, timeout=60)

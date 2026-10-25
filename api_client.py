@@ -1,9 +1,22 @@
+
 import requests
 
-url = "https://YOUR-URL.onrender.com/student"
+name = input("Enter your first name: ")
 
-response = requests.get(url, timeout=60)
+url = "https://armadalawrence-activity4.onrender.com/hello"
+params = {"name": name}
 
-print("Status Code:", response.status_code)
-print("Response:")
-print(response.text)
+try:
+    response = requests.get(url, params=params, timeout=60)
+
+    print("Status Code:", response.status_code)
+
+    if response.status_code == 200:
+        data = response.json()
+        print(data["message"])
+    else:
+        print("Request failed.")
+        print("Response:", response.text)
+
+except requests.exceptions.RequestException as e:
+    print("Connection error:", e)
