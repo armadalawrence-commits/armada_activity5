@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 30px 15px;
+            background: #f1f5f9;
+            font-family: Arial, sans-serif;
+            color: #1e293b;
+        }
+
+        .card {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px #00000012;
+        }
+
+        h1 {
+            color: #1d4ed8;
+            margin-top: 0;
+        }
+
+        .item {
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .label {
+            color: #64748b;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 25px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>Student Details</h1>
+
+        <div class="item">
+            <span class="label">Record ID</span>
+            <span class="value">{{ student.id }}</span>
+        </div>
+
+        <div class="item">
+            <span class="label">Student ID</span>
+            <span class="value">{{ student.student_id }}</span>
+        </div>
+
+        <div class="item">
+            <span class="label">Full Name</span>
+            <span class="value">{{ student.name }}</span>
+        </div>
+
+        <div class="item">
+            <span class="label">Program</span>
+            <span class="value">{{ student.program }}</span>
+        </div>
+
+        <div class="item">
+            <span class="label">Year Level</span>
+            <span class="value">{{ student.year }}</span>
+        </div>
+
+        <div class="item">
+            <span class="label">Section</span>
+            <span class="value">{{ student.section }}</span>
+        </div>
+
+        <a href="/">Back to Student List</a>
+    </div>
+</body>
+</html>
