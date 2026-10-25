@@ -4,79 +4,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student API Interface</title>
+    <title>Student Management System</title>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 700px;
-            margin: 40px auto;
-            padding: 20px;
+        * {
+            box-sizing: border-box;
         }
 
-        button {
-            padding: 8px 14px;
-            margin: 5px;
-            cursor: pointer;
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1d4ed8, #4338ca);
+            color: white;
+            padding: 35px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 10px;
+        }
+
+        header p {
+            margin: 0;
+            color: #dbeafe;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        .summary {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        .summary strong {
+            font-size: 30px;
+            color: #2563eb;
+            display: block;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+        }
+
+        input, select, button, .reset {
+            padding: 12px;
+            border-radius: 7px;
+            border: 1px solid #cbd5e1;
+            font-size: 14px;
         }
 
         input {
-            padding: 8px;
+            flex: 1;
+            min-width: 180px;
         }
 
-        #result {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #cccccc;
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .reset {
+            text-decoration: none;
+            color: #334155;
+            background: #e2e8f0;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #1e40af;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .badge {
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .view {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .empty {
+            padding: 30px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 24px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            input, select, button, .reset {
+                width: 100%;
+            }
         }
     </style>
 </head>
+
 <body>
-    <h1>Student API Interface</h1>
+    <header>
+        <h1>Student Management System</h1>
+        <p>Student Records and Information Portal</p>
+    </header>
 
-    <h2>Student Information</h2>
-    <button onclick="loadStudent()">Load Student Information</button>
-    <div id="result"></div>
+    <main>
+        <section class="summary">
+            <strong>{{ total }}</strong>
+            <span>Total Registered Students</span>
+        </section>
 
-    <hr>
+        <form class="filters" method="GET" action="/">
+            <input
+                type="text"
+                name="search"
+                placeholder="Search name, student ID, or record ID..."
+                value="{{ search }}"
+            >
 
-    <h2>Greeting API</h2>
-    <input type="text" id="nameInput" placeholder="Enter your first name">
-    <button onclick="sayHello()">Say Hello</button>
-    <p id="greeting"></p>
+            <select name="program">
+                <option value="">All Programs</option>
+                <option value="BSIT"
+                    {% if selected_program == "BSIT" %}selected{% endif %}>
+                    BSIT
+                </option>
+                <option value="BSCS"
+                    {% if selected_program == "BSCS" %}selected{% endif %}>
+                    BSCS
+                </option>
+                <option value="BSOA"
+                    {% if selected_program == "BSOA" %}selected{% endif %}>
+                    BSOA
+                </option>
+            </select>
 
-    <script>
-        function loadStudent() {
-            fetch('/student')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('result').innerHTML =
-                        '<p><b>Student ID:</b> ' + data.student_id + '</p>' +
-                        '<p><b>Name:</b> ' + data.name + '</p>' +
-                        '<p><b>Program:</b> ' + data.program + '</p>' +
-                        '<p><b>Year:</b> ' + data.year + '</p>' +
-                        '<p><b>Section:</b> ' + data.section + '</p>';
-                })
-                .catch(error => {
-                    document.getElementById('result').textContent =
-                        'Unable to retrieve data.';
-                });
-        }
+            <select name="year">
+                <option value="">All Year Levels</option>
+                {% for y in range(1, 5) %}
+                <option value="{{ y }}"
+                    {% if selected_year == y|string %}selected{% endif %}>
+                    Year {{ y }}
+                </option>
+                {% endfor %}
+            </select>
 
-        function sayHello() {
-            const name = document.getElementById('nameInput').value;
+            <button type="submit">Search / Filter</button>
+            <a class="reset" href="/">Reset</a>
+        </form>
 
-            fetch('/hello?name=' + encodeURIComponent(name))
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('greeting').textContent =
-                        data.message;
-                })
-                .catch(error => {
-                    document.getElementById('greeting').textContent =
-                        'Unable to retrieve greeting.';
-                });
-        }
-    </script>
+        <div class="table-wrap">
+            {% if students %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Record ID</th>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Program</th>
+                        <th>Year</th>
+                        <th>Section</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.id }}</td>
+                        <td>{{ student.student_id }}</td>
+                        <td>{{ student.name }}</td>
+                        <td><span class="badge">{{ student.program }}</span></td>
+                        <td>{{ student.year }}</td>
+                        <td>{{ student.section }}</td>
+                        <td>
+                            <a class="view"
+                               href="/students/{{ student.id }}">
+                               View
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty">
+                <h3>No students found</h3>
+                <p>Try another search or reset the filters.</p>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        Student Management System &copy; 2026
+    </footer>
 </body>
 </html>
